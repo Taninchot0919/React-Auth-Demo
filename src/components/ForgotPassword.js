@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-export default function Login() {
+export default function ForgotPassword() {
   const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login } = useAuth();
+  const { passwordReset } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const [message, setMessage] = useState("");
 
   //   เดี๋ยวมาทำให้เป็น promise ดีๆ
   const handleSubmit = async (e) => {
@@ -17,11 +16,12 @@ export default function Login() {
 
     try {
       setError("");
+      setMessage("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      history.push("/");
+      await passwordReset(emailRef.current.value);
+      setMessage("Check your email in box");
     } catch (error) {
-      setError("Failed to Sign In");
+      setError("Failed to Reset Password");
     }
     setLoading(false);
   };
@@ -30,8 +30,9 @@ export default function Login() {
     <>
       <Card>
         <Card.Body>
-          <h2 className="text-center mb-4">Log In</h2>
+          <h2 className="text-center mb-4">Password Reset</h2>
           {error && <Alert variant="danger">{error}</Alert>}
+          {message && <Alert variant="success">{message}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
@@ -42,21 +43,12 @@ export default function Login() {
                 className="mb-2"
               />
             </Form.Group>
-            <Form.Group id="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                ref={passwordRef}
-                required
-                className="mb-2"
-              />
-            </Form.Group>
             <Button disabled={loading} className="w-100" type="submit">
-              Log In
+              Reset Password
             </Button>
           </Form>
           <div className="w-100 text-center mt-2">
-            <Link to="/forgot-password">Forgot Password ? </Link>
+            <Link to="/login">Login </Link>
           </div>
         </Card.Body>
       </Card>

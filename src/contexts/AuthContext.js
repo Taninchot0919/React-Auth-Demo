@@ -22,6 +22,9 @@ export default function AuthProvider({ children }) {
   const logout = () => {
     return auth.signOut();
   };
+  const passwordReset = (email) => {
+    return auth.sendPasswordResetEmail(email);
+  };
 
   auth.onAuthStateChanged((user) => {
     setCurrentUser(user);
@@ -41,6 +44,7 @@ export default function AuthProvider({ children }) {
     signup,
     login,
     logout,
+    passwordReset,
   };
   return (
     <AuthContext.Provider value={value}>
