@@ -15,6 +15,14 @@ export default function AuthProvider({ children }) {
     return auth.createUserWithEmailAndPassword(email, password);
   };
 
+  const login = (email, password) => {
+    return auth.signInWithEmailAndPassword(email, password);
+  };
+
+  const logout = () => {
+    return auth.signOut();
+  };
+
   auth.onAuthStateChanged((user) => {
     setCurrentUser(user);
   });
@@ -31,6 +39,8 @@ export default function AuthProvider({ children }) {
   const value = {
     currentUser,
     signup,
+    login,
+    logout,
   };
   return (
     <AuthContext.Provider value={value}>
